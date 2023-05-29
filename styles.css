@@ -45,7 +45,7 @@ background-color: whitesmoke
 }
 h1{
     text-align: left;
-    color: rgb(0, 0, 0);
+    color: rgb(243, 243, 243);
 }
 
 .section1 ,.section2 ,.section3{
@@ -53,7 +53,7 @@ h1{
     
 }
 body {
-  background-image: linear-gradient(rgb(255, 0, 128), rgb(0, 128, 255));
+ background-color: #2c2929;
 
     margin-top: 40px;
     text-align: center;
