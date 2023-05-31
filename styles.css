@@ -5,11 +5,10 @@
 }
 .parent{
     display: flex;
-    justify-content: space-around;
 
 }
 section{
-    border: 2px solid black;
+    border: 3px solid black;
     border-radius: 0.5rem;
  
 }
@@ -38,22 +37,34 @@ color: rgb(36, 33, 30);
 background-color: whitesmoke
 
 }
+.dragging{
+  cursor: grab;
+}
 .main{
   display: flex;
   justify-content: flex-start;
-  padding-left: 1rem;
+  padding-left: 0.9rem;
+  padding-right: 0.7rem;
 }
 h1{
     text-align: left;
-    color: rgb(243, 243, 243);
+    color: rgb(228, 216, 216);
 }
 
-.section1 ,.section2 ,.section3{
+.section1{
     width: 20rem;
     
 }
+.section2{
+  width: 20rem;
+
+}
+.section3{
+  width: 20rem;
+
+}
 body {
- background-color: #2c2929;
+  background-color: #2c2929;
 
     margin-top: 40px;
     text-align: center;
@@ -61,77 +72,14 @@ body {
     font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
   }
   
-  #wrap {
-    width: 1100px;
-    margin: 0 auto;
-  }
+  
   svg{
     float: right;
     margin-left: 1rem;
     display: flex;
-  
+  cursor: pointer;
   }
-  #external-events {
-    float: left;
-    width: 150px;
-    padding: 0 10px;
-    border: 1px solid #ccc;
-    background: #eee;
-    text-align: left;
-  }
-  
-  #external-events h4 {
-    font-size: 16px;
-    margin-top: 0;
-    padding-top: 1em;
-  }
-  
-  #external-events-listing {
-    width: 140px;
-    height: 175px;
-    overflow: auto;
-  }
-  
-  #external-events .fc-event {
-    margin: 10px 0;
-    cursor: grabbing;
-  }
-  
-  #external-events p {
-    margin: 1.5em 0;
-    font-size: 11px;
-    color: #666;
-  }
-  
-  #external-events p input {
-    margin: 0;
-    vertical-align: middle;
-  }
-  
-  #calendar {
-    float: right;
-    width: 900px;
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto;
-    grid-gap: 10px;
-    background-color: #2196F3;
-    padding: 10px;
-  }
-  
-  .box {
-    border: 2px solid #666;
-    background-color: #ddd;
-    border-radius: .5em;
-    padding: 10px;
-    cursor: move;
-  }
-  
-  .box.over {
-    border: 3px dotted #666;
-  }
+
 
   input{
     width: 11rem;
@@ -155,4 +103,21 @@ align-items: center;
   }
   [draggable] {
     user-select: none;
+  }
+  .heading{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (min-width:800px){
+.parent{
+display: flex;
+justify-content: space-around;
+}
+  }
+@media screen and (max-width:770px){ 
+  section{
+    margin: 1rem;
+   }
   }

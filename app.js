@@ -47,10 +47,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let dragElement = null;
 
   function handleDragStart(e) {
-    this.style.opacity = '0.4';
-    dragElement = this;
-    e.dataTransfer.setData('text/html', this.outerHTML);
-    dragElement.sourceSection = dragElement.closest('.section1, .section2, .section3');
+  dragElement = this;
+  e.dataTransfer.setData('text/html', this.outerHTML);
+  this.style.transform = 'rotate(5deg)';
+  dragElement.sourceSection = dragElement.closest('.section1, .section2, .section3');
+  this.style.opacity = '0.4';
+  this.classList.add('dragging');  
+  e.stopPropagation();
+  const removeIcon = this.querySelector('svg');
+  removeIcon.addEventListener('click', removeListItem);
+
+  function removeListItem() {
+    const listItem = this.parentNode;
+  const ul = listItem.parentNode;
+  ul.removeChild(listItem);
+  }
   }
 
   function handleDragOver(e) {
@@ -58,57 +69,63 @@ document.addEventListener('DOMContentLoaded', (event) => {
       e.preventDefault();
     }
     e.dataTransfer.dropEffect = 'move';
+
     return false;
   }
 
   function handleDragEnter(e) {
     this.classList.add('over');
+
   }
 
   function handleDragLeave(e) {
     this.classList.remove('over');
+
   }
 
-  function handleDrop(e) {
-    if (e.stopPropagation) {
-      e.stopPropagation();
-    }
-  
-    // Check if the drop target is an SVG element
-    if (e.target.nodeName === 'svg') {
-      return true; // Do not remove the list item
-    }
-  
-    if (dragElement !== this) {
-      const sourceSection = dragElement.sourceSection;
-      const targetSection = this.closest('.section1, .section2, .section3');
-      if (sourceSection === targetSection) {
-        const parentList = dragElement.parentNode;
-        if (parentList.parentNode) {
-          parentList.parentNode.removeChild(parentList);
-        }
-        const ul = this.closest('ul');
-        ul.insertBefore(dragElement, this);
-      } else if (targetSection.classList.contains('section2')) {
-        const ul = targetSection.querySelector('ul');
-        ul.appendChild(dragElement);
-      } else if (targetSection.classList.contains('section1')) {
-        const ul = targetSection.querySelector('ul');
-        ul.appendChild(dragElement);
-      } else if (targetSection.classList.contains('section3')) {
-        const ul = targetSection.querySelector('ul');
-        ul.appendChild(dragElement);
-      }
-    }
-  
-    // Remove the list item if dropped outside any section
-    if (!dragElement.parentNode && !dragElement.classList.contains('remove')) {
-      const ul = dragElement.closest('ul');
-      ul.removeChild(dragElement);
-    }
-  
-    return true;
+ function handleDrop(e) {
+  if (e.stopPropagation) {
+    e.stopPropagation();
   }
+  
+  dragElement.classList.remove('dragging');
+  
+  // Check if the drop target is the editButton
+  if (e.target.classList.contains('editButton')) {
+    return true; // Do not remove the list item
+  }
+
+  if (dragElement !== this) {
+    const sourceSection = dragElement.sourceSection;
+    const targetSection = this.closest('.section1, .section2, .section3');
+    if (sourceSection === targetSection) {
+      const parentList = dragElement.parentNode;
+      if (parentList.parentNode) {
+        parentList.parentNode.removeChild(parentList);
+      }
+      const ul = this.closest('ul');
+      ul.insertBefore(dragElement, this);
+    } else if (targetSection.classList.contains('section2')) {
+      const ul = targetSection.querySelector('ul');
+      ul.appendChild(dragElement);
+    } else if (targetSection.classList.contains('section1')) {
+      const ul = targetSection.querySelector('ul');
+      ul.appendChild(dragElement);
+    } else if (targetSection.classList.contains('section3')) {
+      const ul = targetSection.querySelector('ul');
+      ul.appendChild(dragElement);
+    }
+  }
+  
+  dragElement.style.transform = 'rotate(0deg)';
+  dragElement.style.opacity = '1';
+
+  return true;
+}
+
+  
+  
+
   
   
   
@@ -120,7 +137,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (inputValue !== '') {
       const targetSection = this.closest('.section1, .section2, .section3');
       const ul = targetSection.querySelector('ul');
-      
+  
       const li = document.createElement('li');
       li.draggable = true;
   
@@ -152,25 +169,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
       li.addEventListener('dragover', handleDragOver, false);
       li.addEventListener('dragleave', handleDragLeave, false);
       li.addEventListener('drop', handleDrop, false);
-      li.addEventListener('dragstart', handleDragStart, false);
-      li.addEventListener('dragenter', handleDragEnter, false);
-      li.addEventListener('dragover', handleDragOver, false);
-      li.addEventListener('dragleave', handleDragLeave, false);
-      li.addEventListener('drop', handleDrop, false);
   
       // Add click event listener to the remove icon
-      removeIcon.addEventListener('click', function() {
-        ul.removeChild(li);
-      });
+      removeIcon.addEventListener('click', removeListItem);
   
+      function removeListItem() {
+        ul.removeChild(li);
+      }
     }
   }
+  
   
  
   
   function handleDragEnd(e) {
-    this.style.opacity = '1';
+   
     const sections = document.querySelectorAll('.section1, .section2, .section3');
+    this.classList.remove('dragging');
+     this.style.opacity = '1';
     sections.forEach((section) => {
       section.classList.remove('over');
     });
@@ -295,7 +311,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     item.addEventListener('dragleave', handleDragLeave, false);
     item.addEventListener('drop', handleDrop, false);
     item.addEventListener('dragend', handleDragEnd, false);
-    item.addEventListener('touchstart', handleDragStart, false);
     item.addEventListener('dblclick', handleEditItemClick, false);
   });
 
@@ -310,3 +325,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     button.addEventListener('click', handleAddButtonClick);
   });
 });
+
+
+
+
+
+
+
